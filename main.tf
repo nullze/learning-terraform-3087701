@@ -11,17 +11,61 @@ data "aws_ami" "app_ami" {
     values = ["hvm"]
   }
 
-  owners = ["979382823631"] # Bitnami
+  owners   = ["979382823631"] # Bitnami
+}
+
+data "aws_vpc" "default" { # Set up a Default AWS VPC.
+  default  = true
 }
 
 resource "aws_instance" "blog" { #Changing "web" to "blog" to see how Terraform reacts to errors.
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type #Changing this to var.instance_type to use the variables set in variables.tf
 
+  vpc_security_group_ids = [aws_security_group.blog.id] # This is a VPC Security Group that was setup below. This adds the below parameters setup in the security group to allow ports 443 and 80 ingress, and everything egress. 
+
   tags = {
     Name = "Bitnami ODOO Software 16.0.20230615-R04 - Test 2.0"
   }
 }
+
+resource "aws_security_group" "blog" { # Creating an AWS_SECURITY_GROUP (think of it as a singular firewall for an instance) that has the name "blog" and description.
+  name        = "blog"
+  description = "Allow http and https web traffic in, allow everything out."
+
+  vpc_id = data.aws_vpc.default.id #Referencing the Default AWS VPC that is above.
+}
+
+resource "aws_security_group_rule" "blog_http_in" { # This is creating an AWS Security Group rule called "Blog_HTTP_IN" that is type ingress (traffic coming in) from port 80 to port 80 (our blog) from any cidr block. (Public)
+  type        = "ingress"
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.blog.id # This assigns the new rule to our AWS Security Group, blog. 
+}
+
+resource "aws_security_group_rule" "blog_https_in" { # This is creating an AWS Security Group rule called "Blog_HTTPS_IN" that is type ingress (traffic coming in) from port 443 to port 443 (our blog) from any cidr block. (Public)
+  type        = "ingress"
+  from_port   = 443
+  to_port     = 443
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.blog.id # This assigns the new rule to our AWS Security Group, blog. 
+}
+
+resource "aws_security_group_rule" "blog_everything_out" { # This is creating an AWS Security Group rule called "Blog_Everything_Out" that is type egress (traffic going out) from port 0 to port 0 (our blog) from any cidr block. (Public)
+  type        = "egress"
+  from_port   = 0 #Setting up zero allows all ports.
+  to_port     = 0 #Setting up zero allows all ports.
+  protocol    = "-1" #Negative one allows all protocols out.
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.blog.id # This assigns the new rule to our AWS Security Group, blog. 
+}
+
 
 # Terraform is a DevOps tool for declerative infrastructure - infrastructure
 # as code. It simplifis and accelerates the configuration of cloud-based environments.
@@ -76,3 +120,14 @@ resource "aws_instance" "blog" { #Changing "web" to "blog" to see how Terraform 
 # In Terraform, the name tf-course is easier to use, where-as in AWS, a unique name may have to include a date string to make sure bucket names are all unique. 
 # The ACL = "private" means that the bucket will be private. 
 # This is a simple example, and Terraform can add a lot of other variables to the resources.
+
+# INDENTATION
+
+# The proper indentation for a Terraform file is 2 spaces rather than a tab.
+# Keep blank lines for clarity, especially after Single Meta-Arguments and Block Meta-Arguments. 
+# Always think about readability when setting up your code. 
+# Good practive to have all equal signs aligned. 
+
+# Think of AWS Security Groups as Firewalls that can be configured for a Single Instance. 
+
+# Time to develop a VPC. 
