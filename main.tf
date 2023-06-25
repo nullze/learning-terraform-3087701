@@ -19,7 +19,7 @@ resource "aws_instance" "web" {
   instance_type = var.instance_type #Changing this to var.instance_type to use the variables set in variables.tf
 
   tags = {
-    Name = "Odoo Software - Test"
+    Name = "Bitnami ODOO Software 16.0.20230615-R04 - Test 2.0"
   }
 }
 
