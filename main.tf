@@ -57,3 +57,22 @@ resource "aws_instance" "blog" { #Changing "web" to "blog" to see how Terraform 
 # How does Terraform react to errors? Change the "web" field under AWS instance to "blog" and see what happens.
 
 # Terraform is very detailed when describing the errors it finds with its files. 
+
+# Resources
+
+# Now is time to take a deeper dive into Terraform code. 
+
+# A provider isn't a resource, but it sets a provder for a set of possible resources to define. 
+# You need to have a provider in your code, so that Terraform knows where the resources should go. 
+# The resource defined in the example is an AWS S3 Bucket, which is pretty simple. 
+# The word "resource" tells Terraform that a resource is going to be created, next is the resource type "aws_s3_bucket" for example. 
+# Next, is the resource name "tf-course" which can be whatever you want to name your resource. 
+
+#resource "aws_s3_bucket" "tf-course" {
+  #bucket = "samuelson-terraform-20220826"
+  #acl = "private"
+#}
+
+# In Terraform, the name tf-course is easier to use, where-as in AWS, a unique name may have to include a date string to make sure bucket names are all unique. 
+# The ACL = "private" means that the bucket will be private. 
+# This is a simple example, and Terraform can add a lot of other variables to the resources.
