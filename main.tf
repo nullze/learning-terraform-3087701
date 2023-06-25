@@ -14,7 +14,7 @@ data "aws_ami" "app_ami" {
   owners = ["979382823631"] # Bitnami
 }
 
-resource "aws_instance" "web" {
+resource "aws_instance" "blog" { #Changing "web" to "blog" to see how Terraform reacts to errors.
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type #Changing this to var.instance_type to use the variables set in variables.tf
 
@@ -50,3 +50,8 @@ resource "aws_instance" "web" {
 
 # Now we begin testing what happens when you change code in Terraform. 
 # Uncommented all in the variables.tf file. Also uncommenting outputs.tf 
+
+#If you are not seeing the results of your current run, it may be behind a previous run that
+# was not applied. Since Terraform is acyclic, you have to keep track of runs in sequential order.
+
+# How does Terraform react to errors? Change the "web" field under AWS instance to "blog" and see what happens.
