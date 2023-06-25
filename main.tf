@@ -55,3 +55,5 @@ resource "aws_instance" "blog" { #Changing "web" to "blog" to see how Terraform 
 # was not applied. Since Terraform is acyclic, you have to keep track of runs in sequential order.
 
 # How does Terraform react to errors? Change the "web" field under AWS instance to "blog" and see what happens.
+
+# Terraform is very detailed when describing the errors it finds with its files. 
