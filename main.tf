@@ -16,7 +16,7 @@ data "aws_ami" "app_ami" {
 
 resource "aws_instance" "web" {
   ami           = data.aws_ami.app_ami.id
-  instance_type = "t3.nano"
+  instance_type = var.instance_type #Changing this to var.instance_type to use the variables set in variables.tf
 
   tags = {
     Name = "Odoo Software - Test"
@@ -48,4 +48,5 @@ resource "aws_instance" "web" {
 # If you trigger another run, you can compare the difference in STATE files. 
 # STATE files are incredibly helpful when troubleshooting when something breaks. 
 
-
+# Now we begin testing what happens when you change code in Terraform. 
+# Uncommented all in the variables.tf file. Also uncommenting outputs.tf 
