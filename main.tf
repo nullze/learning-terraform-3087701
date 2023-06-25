@@ -3,7 +3,7 @@ data "aws_ami" "app_ami" {
 
   filter {
     name   = "name"
-    values = ["bitnami-tomcat-*-x86_64-hvm-ebs-nami"]
+    values = ["bitnami-odoo-16.0.20230315-1-r01-linux-debian-11-x86_64-hvm-ebs-nami"]
   }
 
   filter {
